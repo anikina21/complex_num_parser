@@ -1,0 +1,21 @@
+//  Real numbers
+number = @{ ASCII_DIGIT+ ~ ("." ~ ASCII_DIGIT+)? }
+
+//  Arithmetic rules
+sum     = { product ~ (("+" | "-") ~ product)* }
+product = { factor ~ (("*" | "/") ~ factor)* }
+factor  = { complex | number | "(" ~ sum ~ ")" }
+
+//  Complex numbers
+complex = {
+    number ~ (("+" | "-") ~ number ~ "i") | number ~ "i" | ("+" | "-")? ~ number ~ ("+" | "-") ~ number ~ "i"
+}
+
+//  Entry rule
+expression = { SOI ~ sum ~ EOI }
+
+
+
+
+
+ 
