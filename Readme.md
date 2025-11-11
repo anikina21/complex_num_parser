@@ -1,16 +1,50 @@
-### Complex numbers parser
+# complex-num-parser
 
-A parser for complex numbers; addition, subtraction, multiplication, division of complex numbers
-For example(3+4i)*(1-2i)
+**Project name:** complex-num-parser
 
-### Example
+**Brief description:**
+A parser and evaluator for arithmetic expressions with complex numbers. The parser recognizes real numbers (integer and float), imaginary numbers (with trailing `i`), the four basic operators `+ - * /`, and parentheses. It produces an AST which is evaluated to a `num_complex::Complex<f64>` result.\
 
-```rust
-fn main() -> anyhow::Result<()> {
-    let pair = Grammar::parse(Rule::complex, "5-2i")?.next().ok_or_else(|| anyhow!("no pair"))?;
+Програма парсить і обчислює вирази з комплексними числами (наприклад, `(3+4i)*(1-2i)`).
 
-    println!("{:?}", pair);
-    Ok(())
-}
+## Technical description of parsing process
+The parser uses the Pest parsing library to convert an input string (such as `(3+4i)*(1-2i)`) into a structured parse tree according to grammar rules defined in `grammar.pest`.
+
+After parsing, the program builds an Abstract Syntax Tree (AST) from the Pest `Pair` iterator. This AST is then evaluated using the `num-complex` crate to obtain the resulting complex number.
+
+### Example of internal parsing and evaluation process
+Input: `(3+4i)*(1-2i)`
+
+1. Parsing phase: The string is matched against grammar rules. Pest produces a parse tree with nested rules.
+2. AST construction: The parse tree is transformed into nested `Expr` nodes representing numbers, complex numbers, and binary operations.
+3. Evaluation: The AST is recursively evaluated using the appropriate arithmetic operators. The final result is a `Complex<f64>` number.
+
+Result: `11 - 2i`
+
+### CLI usage examples
+After building the project (`cargo build`), you can use the command-line interface:
+
+```bash
+# Parse and evaluate a single expression
+$ cargo run -- parse "(3+4i)*(1-2i)"
+AST: BinaryOp { op: '*', left: Complex(3+4i), right: Complex(1-2i) }
+Result: 11 + -2i
+
+# Parse and evaluate expressions from a file (each line = one expression)
+$ cargo run -- file examples.txt
+(3+4i)*(1-2i) -> 11 + -2i
+2+3*4 -> 14 + 0i
+
+# Show help
+$ cargo run
+Usage:
+  cargo parse <expression>    - Parse and evaluate a single expression
+  cargo file <filename>       - Parse expressions from file (one per line)
+
+#The results are printed as real and imaginary parts separated by `+` and `i`.
 
 ```
+
+## How results are used
+
+The parsed expressions are transformed into a numeric representation (`Complex<f64>`), enabling arithmetic operations, scientific calculations, or integration into larger mathematical software.

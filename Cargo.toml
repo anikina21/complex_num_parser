@@ -3,10 +3,11 @@ name = "complex_num_parser"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
-description = "A parser for complex numbers; addition, subtraction, multiplication, division of complex numbers"
+description = "A parser and evaluator for arithmetic expressions with complex numbers."
 
 [dependencies]
 anyhow = "1.0.100"
-peg = "0.8.5"
+num-complex = "0.4.6"
 pest = "2.8.3"
 pest_derive = "2.8.3"
+thiserror = "2.0.17"

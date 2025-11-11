@@ -1,21 +1,24 @@
-//  Real numbers
+// Real numbers
 number = @{ ASCII_DIGIT+ ~ ("." ~ ASCII_DIGIT+)? }
 
-//  Arithmetic rules
-sum     = { product ~ (("+" | "-") ~ product)* }
-product = { factor ~ (("*" | "/") ~ factor)* }
-factor  = { complex | number | "(" ~ sum ~ ")" }
-
-//  Complex numbers
-complex = {
-    number ~ (("+" | "-") ~ number ~ "i") | number ~ "i" | ("+" | "-")? ~ number ~ ("+" | "-") ~ number ~ "i"
+// Complex numbers: handles "3+4i", "5i", "-2i", "3-4i"
+complex = @{
+    number ~ ("+" | "-") ~ number ~ "i" |
+    ("+" | "-")? ~ number ~ "i"
 }
 
-//  Entry rule
+// Arithmetic rules
+sum     = { product ~ ((add_op | sub_op) ~ product)* }
+product = { factor ~ ((mul_op | div_op) ~ factor)* }
+factor  = { "(" ~ sum ~ ")" | complex | number }
+
+// Operator tokens
+add_op = { "+" }
+sub_op = { "-" }
+mul_op = { "*" }
+div_op = { "/" }
+
+// Entry rule
 expression = { SOI ~ sum ~ EOI }
 
-
-
-
-
- 
+WHITESPACE = _{ " " | "\t" | "\n" | "\r" }
