@@ -36,13 +36,43 @@ $ cargo run -- file examples.txt
 2+3*4 -> 14 + 0i
 
 # Show help
-$ cargo run
+$ cargo run -- help
+Complex Number Parser CLI
 Usage:
-  cargo parse <expression>    - Parse and evaluate a single expression
-  cargo file <filename>       - Parse expressions from file (one per line)
+  cargo run -- parse <expression>    - Parse and evaluate a single expression
+  cargo run -- file <filename>       - Parse expressions from file (one per line)
+  cargo run -- help                  - Show help message
+  cargo run -- credits               - Show authors and acknowledgements
 
-#The results are printed as real and imaginary parts separated by `+` and `i`.
+```
 
+## Grammar Rules
+
+```rust
+// Real numbers
+number = @{ ASCII_DIGIT+ ~ ("." ~ ASCII_DIGIT+)? }
+
+// Complex numbers: handles "3+4i", "5i", "-2i", "3-4i"
+complex = @{
+    number ~ ("+" | "-") ~ number ~ "i" |
+    ("+" | "-")? ~ number ~ "i"
+}
+
+// Arithmetic rules
+sum     = { product ~ ((add_op | sub_op) ~ product)* }
+product = { factor ~ ((mul_op | div_op) ~ factor)* }
+factor  = { "(" ~ sum ~ ")" | complex | number }
+
+// Operator tokens
+add_op = { "+" }
+sub_op = { "-" }
+mul_op = { "*" }
+div_op = { "/" }
+
+// Entry rule
+expression = { SOI ~ sum ~ EOI }
+
+WHITESPACE = _{ " " | "\t" | "\n" | "\r" }
 ```
 
 ## How results are used
