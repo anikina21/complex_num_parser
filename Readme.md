@@ -44,6 +44,12 @@ Usage:
   cargo run -- help                  - Show help message
   cargo run -- credits               - Show authors and acknowledgements
 
+# Show credits
+$ cargo run -- credits
+--Complex Number Parser--
+Developed by Anikina Anastasiia
+Based on the pest parser and complex number evaluation module.
+(c)2025
 ```
 
 ## Grammar Rules
